@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import { createHashHistory } from 'history';
 import { routerMiddleware, routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
+import { ipcMiddleware } from '../utils/ipcMiddleware';
 import createRootReducer from '../reducers';
 import * as counterActions from '../actions/counter';
 import type { counterStateType } from '../reducers/types';
@@ -48,6 +49,9 @@ const configureStore = (initialState?: counterStateType) => {
       })
     : compose;
   /* eslint-enable no-underscore-dangle */
+
+  // Electron IPC
+  middleware.push(ipcMiddleware)
 
   // Apply Middleware & Compose Enhancers
   enhancers.push(applyMiddleware(...middleware));

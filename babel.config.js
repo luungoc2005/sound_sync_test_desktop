@@ -31,6 +31,12 @@ module.exports = api => {
       [require('@babel/preset-react'), { development }]
     ],
     plugins: [
+      ['import', {
+        libraryName: 'antd', 
+        libraryDirectory: 'es', 
+        style: 'css'
+      }],
+
       // Stage 0
       require('@babel/plugin-proposal-function-bind'),
 

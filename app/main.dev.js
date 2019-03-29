@@ -14,6 +14,8 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+// import { TcpServer } from './app/network/tcp/tcpServer';
+// import { UdpBroadcastClient } from './app/network/udp/udpServer';
 
 export default class AppUpdater {
   constructor() {
@@ -34,6 +36,7 @@ if (
   process.env.NODE_ENV === 'development' ||
   process.env.DEBUG_PROD === 'true'
 ) {
+  console.log('Using electron-debug');
   require('electron-debug')();
 }
 
@@ -70,10 +73,19 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 728
+    height: 728,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
+
+  mainWindow.webContents.openDevTools()
+
+  // const tcpServer = new TcpServer();
+  // const broadcaster = new UdpBroadcastClient();
+  // broadcaster.start();
 
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
@@ -86,10 +98,16 @@ app.on('ready', async () => {
     } else {
       mainWindow.show();
       mainWindow.focus();
+
+      require('./app').initialize(mainWindow);
+      // tcpServer.start();
+      // broadcaster.start();
     }
   });
 
   mainWindow.on('closed', () => {
+    // tcpServer.stop();
+    // broadcaster.stop();
     mainWindow = null;
   });
 

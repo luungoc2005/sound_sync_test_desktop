@@ -7,6 +7,12 @@ import './app.global.css';
 
 const store = configureStore();
 
+import { ipcRenderer } from 'electron';
+ipcRenderer.on('dispatch', (event, arg) => {
+  console.log('dispatch received', arg)
+  store.dispatch(arg)
+})
+
 render(
   <AppContainer>
     <Root store={store} history={history} />

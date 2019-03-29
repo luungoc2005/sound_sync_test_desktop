@@ -4,11 +4,16 @@ export type counterStateType = {
   +counter: number
 };
 
+export type playerStateType = {
+  channelId: string;
+  token: string;
+}
+
 export type Action = {
   +type: string
 };
 
-export type GetState = () => counterStateType;
+export type GetState = () => counterStateType | playerStateType;
 
 export type Dispatch = ReduxDispatch<Action>;
 
